@@ -6,7 +6,8 @@ module.exports = {
 
   Mutation: {
   	createUser: async (_, { userId }, { dataSources }) => {
-      dataSources.userAPI.createUser({ userId });
+      await dataSources.userAPI.createUser({ userId});
+     
     }
   	 
   }

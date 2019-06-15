@@ -20,7 +20,7 @@ type Activity {
   accessibility: Float
   type: String
   participants: Int
-  price: Int
+  price: Float
   key: String
 }
 
