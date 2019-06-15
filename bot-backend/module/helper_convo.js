@@ -1,8 +1,9 @@
 const constants = require('./../data/constant.js');
+import { gql } from 'apollo-boost';
 
 var self = {
     
-    preText: function(convo) {
+    preText: function(convo, client) {
 
         convo.ask({
                     text: `Are you bored?`,
@@ -15,37 +16,58 @@ var self = {
                     convo.end();
 
                 } else{
-                    self.askForActivityType(convo);
+                    self.askForActivityType(convo, client);
                 }
-
-
-                // convo.set('name', text);
                 
             });
     },
 
 
-    askForActivityType: function(convo) {
+    askForActivityType: function(convo, client) {
 
             convo.ask({
                 text: `What type of activity would you like to do?`,
                 quickReplies: constants.ACTIVITY_TYPES
             }, (payload, convo) => {
                 const text = payload.message.text;
+                convo.set('actType', text);
 
-                self.suggestNewActivity(convo);
+                self.suggestNewActivity(convo, client);
 
                 
             });
         },
 
 
-    suggestNewActivity: function(convo) {
+    suggestNewActivity: function(convo, client) {
 
         //call graphql and provide an activity
 
-        convo.ask({
-            text: `Explore the nightlife of your city`,
+    const GET_BORED_BY_ID = gql`
+        query getBoredById($atype: String!   ) {
+         activity(type: $atype) {
+           activity
+           type
+           price
+
+         }
+        }
+    `;
+
+    client
+      .query({
+        query: GET_BORED_BY_ID,
+        variables: {
+          atype: convo.get('actType'),
+        }
+      })
+      .then((returnedData) => {
+
+        console.log(returnedData);
+      
+
+              convo.ask({
+            text: returnedData.data.activity.activity,
             quickReplies: ['I like it!','No, That\'s boring 😒']
         }, (payload, convo) => {
             
@@ -57,12 +79,20 @@ var self = {
 
 
             } else{
-                self.suggestNewActivity(convo);
+
+                convo.say(`Okay!`).then(() => self.askForActivityType(convo, client));
 
             }
             
             
         });
+
+
+    });
+
+
+
+
 
 
     }

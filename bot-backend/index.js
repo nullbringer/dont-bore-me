@@ -1,16 +1,52 @@
-'use strict';
+// 'use strict';
+import 'cross-fetch/polyfill';
+import ApolloClient, { gql } from 'apollo-boost';
+
 const BootBot = require('bootbot');
+
 
 const newUserModule = require('./module/new_user_driver.js');
 const oldUserModule = require('./module/old_user_driver.js');
 
+const client = new ApolloClient({
+  uri: 'http://localhost:4000/',
+});
+
 const bot = new BootBot({
-  accessToken: 'EAAEfVjbvWdUBAFNDB04dVvHbGvUOebvKnQqUFLriYzUpjQCzyqLMjFQF9ldTAYyZA6UGKF1F6kozVffumhxlvGkluwe6OMpidD8k3CcEVDasXqVXH1DL0fisEqN3Bk8kZBPOTcSZCKXYY8RdXG4CdUuQ94IKPfufrxWOPlfcQZDZD',
+  accessToken: 'EAAdIlEun0UsBADH6AT6nyTYyUZBxzbGo6KlCXIPVF4q3UFFgBbHvoyKFAb0t6FC3Ml1bKt5kcbDZC1kVlZCrPyl8dpaDU1BQOHfZC7pp33CvJxyuLaKboQRnHINLfM2sZC4hwJZAB9AIbM6ZBTVBaB1S6g8QcIhCvXJQUVEwIpZAsAZDZD',
   verifyToken: 'team11',
   appSecret: '2c0ee0cd40a73013cf18e0cc4ebd066a'
 });
 
 bot.on('message', (payload, chat) => {
+
+	console.log(payload);
+
+	// const GET_BORED_BY_ID = gql`
+	// 	query getBoredById {
+	// 	 activity(type: "recreational") {
+	// 	   activity
+	// 	   type
+	// 	   price
+
+	// 	 }
+	// 	}
+	// `;
+
+	// client
+	//   .query({
+	//     query: GET_BORED_BY_ID,
+	//   })
+	//   .then(console.log);
+
+
+
+
+
+
+});
+
+bot.hear(['hello', 'hi', /hey( there)?/i], (payload, chat) => {
 
 	chat.conversation((convo) => {
 
@@ -22,7 +58,7 @@ bot.on('message', (payload, chat) => {
 
 		//if new user
 
-		newUserModule.haveConversion(convo);
+		newUserModule.haveConversion(convo,client);
 
 
 
@@ -32,14 +68,9 @@ bot.on('message', (payload, chat) => {
 
 
 	});
-});
 
-// bot.hear(['hello', 'hi', /hey( there)?/i], (payload, chat) => {
-// 	// Send a text message followed by another text message that contains a typing indicator
-// 	chat.say('Hello, human friend!').then(() => {
-// 		chat.say('How are you today?', { typing: true });
-// 	});
-// });
+
+});
 
 // bot.hear(['food', 'hungry'], (payload, chat) => {
 // 	// Send a text message with quick replies
