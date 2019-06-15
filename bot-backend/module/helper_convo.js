@@ -7,10 +7,6 @@ const GIPHY_URL = `https://api.giphy.com/v1/gifs/search?api_key=Ky0tspF0p3JZsGCS
 var self = {
     
     preText: function(convo, client) {
-
-
-
-
         convo.ask({
                     text: `Bored?`,
                     quickReplies: ['Yes 😐', 'Hell no!']
@@ -49,30 +45,29 @@ var self = {
 
         //call graphql and provide an activity
 
-    const GET_BORED_BY_ID = gql`
-        query getBoredById($atype: String!   ) {
+    const GET_ACTIVITY_BY_TYPE = gql`
+        query getActivityByType($atype: String!) {
          activity(type: $atype) {
            activity
+           accessibility
            type
+           participants
            price
-
+           key
          }
         }
     `;
 
     client
       .query({
-        query: GET_BORED_BY_ID,
+        query: GET_ACTIVITY_BY_TYPE,
         variables: {
           atype: convo.get('actType'),
         }
       })
       .then((returnedData) => {
 
-        console.log(returnedData);
-      
-
-              convo.ask({
+        convo.ask({
             text: returnedData.data.activity.activity,
             quickReplies: ['I like it!','You\'ve got to be kidding?! 😒']
         }, (payload, convo) => {
