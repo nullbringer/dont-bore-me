@@ -12,7 +12,7 @@ class UserAPI extends DataSource {
     // console.log("get user:" + userId);
 
     //TODO: null check
-    console.log(userData);
+    // console.log(userData);
     return userData;
   }
 

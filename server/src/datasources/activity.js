@@ -6,24 +6,24 @@ class ActivityAPI extends RESTDataSource {
     this.baseURL = 'https://www.boredapi.com/api/';
   }
 
-  boredReducer(activity) {
+  activityReducer(response) {
 
-  return {
-    activity: activity.activity,
-    accessibility: activity.accessibility,
-    type: activity.type,
-    participants: activity.participants,
-    price: activity.price,
-    key: activity.key 
-  };
-}
+    return {
+      activity: response.activity,
+      accessibility: response.accessibility,
+      type: response.type,
+      participants: response.participants,
+      price: response.price,
+      key: response.key 
+    };
+  }
 
 
 
   async getActivityByKey(key) {
 
       const response = await this.get('activity', { key: key });
-      return this.boredReducer(response);
+      return this.activityReducer(response);
 
     // const res = await this.get(`/movie/${id}/credits`);
     // return res ? res.cast : [];

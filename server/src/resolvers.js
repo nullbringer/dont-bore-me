@@ -7,12 +7,15 @@ module.exports = {
     user: async (_, { userId }, { dataSources }) => {
       const userdata = await dataSources.userAPI.getUser({ userId });
       
-      return userdata.map(({ activityKey }) =>
+      const dataToReturn = userdata.map(({ activityKey }) =>
         dataSources.activityAPI.getActivityByKey(activityKey),
       );
+
+      return {
+        userId: userId,
+        activities: dataToReturn,
+      };
     },
-
-
   },
 
   Mutation: {
@@ -21,10 +24,15 @@ module.exports = {
 
       await dataSources.userAPI.saveUser({ userId, activityKey });
       const userdata = await dataSources.userAPI.getUser({ userId });
-      console.log(userdata);
-      return userdata.map(({ activityKey }) =>
+      const dataToReturn = userdata.map(({ activityKey }) =>
         dataSources.activityAPI.getActivityByKey(activityKey),
       );
+
+      return {
+        userId: userId,
+        activities: dataToReturn,
+      };
+
     },
   	createUser: async (_, { userId }, { dataSources }) => {
       await dataSources.userAPI.createUser({ userId});
