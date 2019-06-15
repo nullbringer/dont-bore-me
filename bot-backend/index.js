@@ -2,6 +2,7 @@
 const BootBot = require('bootbot');
 
 const newUserModule = require('./module/new_user_driver.js');
+const oldUserModule = require('./module/old_user_driver.js');
 
 const bot = new BootBot({
   accessToken: 'EAAEfVjbvWdUBAFNDB04dVvHbGvUOebvKnQqUFLriYzUpjQCzyqLMjFQF9ldTAYyZA6UGKF1F6kozVffumhxlvGkluwe6OMpidD8k3CcEVDasXqVXH1DL0fisEqN3Bk8kZBPOTcSZCKXYY8RdXG4CdUuQ94IKPfufrxWOPlfcQZDZD',
@@ -12,6 +13,8 @@ const bot = new BootBot({
 bot.on('message', (payload, chat) => {
 
 	chat.conversation((convo) => {
+
+		console.log(payload);
 
 		//Send greetings.
 		
@@ -24,6 +27,8 @@ bot.on('message', (payload, chat) => {
 
 
 		//else if old user
+
+		// oldUserModule.haveConversion(convo);
 
 
 	});
