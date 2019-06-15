@@ -12,13 +12,13 @@ var self = {
 
 
         convo.ask({
-                    text: `Are you bored?`,
-                    quickReplies: ['Yes 😐', 'Nope']
+                    text: `Bored?`,
+                    quickReplies: ['Yes 😐', 'Hell no!']
                 }, (payload, convo) => {
                 const text = payload.message.text;
 
                 if(text == 'Nope'){
-                    convo.say(`Great. Have a great day`);
+                    convo.say(`My job here is done! May the force be with you!`);
                     convo.end();
 
                 } else{
@@ -32,7 +32,7 @@ var self = {
     askForActivityType: function(convo, client) {
 
             convo.ask({
-                text: `What type of activity would you like to do?`,
+                text: `What would you like to do?`,
                 quickReplies: constants.ACTIVITY_TYPES
             }, (payload, convo) => {
                 const text = payload.message.text;
@@ -74,7 +74,7 @@ var self = {
 
               convo.ask({
             text: returnedData.data.activity.activity,
-            quickReplies: ['I like it!','No, That\'s boring 😒']
+            quickReplies: ['I like it!','You\'ve got to be kidding?! 😒']
         }, (payload, convo) => {
             
             const text = payload.message.text;
