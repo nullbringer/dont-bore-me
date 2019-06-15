@@ -4,22 +4,17 @@ const resolvers = require('./resolvers');
 
 
 
-const BoredAPI = require('./datasources/launch');
+// const BoredAPI = require('./datasources/launch');
+
+const ActivityAPI = require('./datasources/activity');
 
 const UserAPI = require('./datasources/user');
-
-
-
-
-
-
-
 
 const server = new ApolloServer({
   typeDefs,
   resolvers,
   dataSources: () => ({
-    boredAPI: new BoredAPI(),
+    activityAPI: new ActivityAPI(),
     userAPI: new UserAPI()
   })
 });
