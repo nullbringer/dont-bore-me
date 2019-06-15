@@ -1,38 +1,49 @@
 const { DataSource } = require('apollo-datasource');
+const Sequelize = require('sequelize');
 
 
 class UserAPI extends DataSource {
-  constructor({ store }) {
+  constructor() {
     super();
-    this.store = store;
+    this.store = createStore();
   }
 
-  /**
-   * This is a function that gets called by ApolloServer when being setup.
-   * This function gets called with the datasource config including things
-   * like caches and context. We'll assign this.context to the request context
-   * here, so we can know about the user making requests
-   */
-  initialize(config) {
-    this.context = config.context;
-  }
 
-  /**
-   * User can be called with an argument that includes email, but it doesn't
-   * have to be. If the user is already on the context, it will use that user
-   * instead
-   */
-  
+async createUser({ userId }) {
+    const user = await this.store.users.create({ userId: userId,activity: "Check"} );
+    console.log(user);
 
-  
-
-  async createUser() {
-    const userId = "123";
-    const users = await this.store.users.findOrCreate({ where: { userId } });
-    return users && users[0] ? users[0] : null;
-  }
+    return user; 
+  }  
 
   
 }
+
+
+const createStore = () => {
+  const sequelize = new Sequelize('database', 'username', 'password', {
+    dialect: 'sqlite',
+    logging: false,
+    storage: './.store.sqlite',
+    operatorsAliases: false,
+  });
+
+  const CREATE_USER_QUERY = `CREATE TABLE IF NOT EXISTS users(
+    id INTEGER PRIMARY KEY,
+    createdAt DATETIME,
+    updatedAt DATETIME,
+    userId TEXT,
+    activity TEXT
+  )`;
+
+  sequelize.query(CREATE_USER_QUERY);
+
+  const users = sequelize.define('user', {
+    userId: Sequelize.STRING,
+    activity: Sequelize.STRING,
+  });
+
+  return { users };
+};
 
 module.exports = UserAPI;
