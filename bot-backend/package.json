@@ -1,0 +1,35 @@
+{
+  "name": "dont-bore-me-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "apollo-boost": "^0.4.2",
+    "bootbot": "^1.0.16",
+    "cross-fetch": "^3.0.4",
+    "esm": "^3.2.25",
+    "graphql": "^14.3.1",
+    "node-fetch": "^2.6.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.4.5",
+    "@babel/node": "^7.4.5",
+    "@babel/preset-env": "^7.4.5",
+    "@babel/register": "^7.4.4",
+    "nodemon": "^1.19.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon  -r esm index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/urbangeek/dont-bore-me.git"
+  },
+  "author": "Team 10",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/urbangeek/dont-bore-me/issues"
+  },
+  "homepage": "https://github.com/urbangeek/dont-bore-me#readme"
+}
