@@ -22,49 +22,40 @@ bot.on('message', (payload, chat) => {
 
 	console.log(payload);
 
-	// const GET_BORED_BY_ID = gql`
-	// 	query getBoredById {
-	// 	 activity(type: "recreational") {
-	// 	   activity
-	// 	   type
-	// 	   price
-
-	// 	 }
-	// 	}
-	// `;
-
-	// client
-	//   .query({
-	//     query: GET_BORED_BY_ID,
-	//   })
-	//   .then(console.log);
-
-
-
-
-
 
 });
 
 bot.hear(['hello', 'hi', /hey( there)?/i], (payload, chat) => {
 
+	console.log(payload);
+
 	chat.conversation((convo) => {
 
-		console.log(payload);
+		chat.getUserProfile().then((user) => {
+		    
+		    chat.say(`Hello, ${user.first_name}!`).then(()  => {
 
-		//Send greetings.
+		    				//call graphql
+
+			//if new user
+
+			newUserModule.haveConversion(convo,client);
+
+
+
+			//else if old user
+
+			// oldUserModule.haveConversion(convo);
+
+
+
+
+		    });
+
+		  });
+
 		
-		//call graphql
 
-		//if new user
-
-		newUserModule.haveConversion(convo,client);
-
-
-
-		//else if old user
-
-		// oldUserModule.haveConversion(convo);
 
 
 	});
