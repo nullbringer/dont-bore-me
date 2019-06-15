@@ -17,7 +17,7 @@ var self = {
                 }, (payload, convo) => {
                 const text = payload.message.text;
 
-                if(text == 'Nope'){
+                if('no' in text){
                     convo.say(`My job here is done! May the force be with you!`);
                     convo.end();
 
