@@ -12,6 +12,8 @@ type Query {
 
 type Mutation {
     createUser(userId: String): User # login token
+    updateUser(userId: String,activity:String,accessibility:Float
+    ,type:String,participants:Int,price:Float,key:String ): User
   }
 
 
