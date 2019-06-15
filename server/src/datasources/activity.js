@@ -24,9 +24,6 @@ class ActivityAPI extends RESTDataSource {
 
       const response = await this.get('activity', { key: key });
       return this.activityReducer(response);
-
-    // const res = await this.get(`/movie/${id}/credits`);
-    // return res ? res.cast : [];
   }
 
   async getActivityByType({ type }) {

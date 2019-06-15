@@ -9,10 +9,6 @@ class UserAPI extends DataSource {
 
   async getUser({ userId }) {
     const userData = await this.store.useractivities.findAll({ where: { userId } });
-    // console.log("get user:" + userId);
-
-    //TODO: null check
-    // console.log(userData);
     return userData;
   }
 
@@ -24,7 +20,6 @@ class UserAPI extends DataSource {
       },
     });
     if (!userData) await this.store.useractivities.create({ userId, activityKey });
-    // else await this.store.likes.destroy({ where: { user, movie: id } });
   }
 
 }
