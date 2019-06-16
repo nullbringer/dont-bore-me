@@ -207,7 +207,7 @@ var self = {
                       .query({
                             query: GET_GIPHY_BY_KEYWORD,
                             variables: {
-                              kw: 'thumb',
+                              kw: 'cool',
                             }
                           })
                           .then((returnedData) => {
