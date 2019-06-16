@@ -7,6 +7,7 @@ type Query {
   activity(type: String!): Activity
   user(userId: String!):User
   activityByPrice(price: Float!):Activity
+  gifById(search : String):Gif
   
 
   
@@ -32,6 +33,10 @@ type Activity {
 type User {
 	userId : String,
   activities: [Activity]
+}
+
+type Gif {
+  image_url : String
 }
 
 

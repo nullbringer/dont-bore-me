@@ -6,6 +6,9 @@ module.exports = {
     activityByPrice: (_, { price }, { dataSources }) =>
       dataSources.activityAPI.getActivityByPrice({ price: price }),
 
+    gifById: (_, { search }, { dataSources }) =>
+      dataSources.giphyAPI.getGifById({ search: search }),  
+
 
     user: async (_, { userId }, { dataSources }) => {
       const userdata = await dataSources.userAPI.getUser({ userId });

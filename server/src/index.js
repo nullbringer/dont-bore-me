@@ -10,12 +10,15 @@ const ActivityAPI = require('./datasources/activity');
 
 const UserAPI = require('./datasources/user');
 
+const GiphyAPI = require('./datasources/giphy');
+
 const server = new ApolloServer({
   typeDefs,
   resolvers,
   dataSources: () => ({
     activityAPI: new ActivityAPI(),
-    userAPI: new UserAPI()
+    userAPI: new UserAPI(),
+    giphyAPI: new GiphyAPI()
   })
 });
 
