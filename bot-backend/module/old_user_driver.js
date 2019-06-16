@@ -3,9 +3,9 @@ const helperConvo = require('./helper_convo.js');
 
 module.exports = {
     
-    haveConversion: function(convo) {
+    haveConversion: function(convo, client, lastActivity) {
 
-        helperConvo.preText(convo);
+        helperConvo.feelbackLastIdea(convo, client, lastActivity);
 
                     
     }
