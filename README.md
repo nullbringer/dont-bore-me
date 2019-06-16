@@ -20,3 +20,11 @@ Picture this. You're bored. Mind-numbingly bored. So bored, you can't even begin
 * Can filter by participants
 * Integrates GIFs to make conversation more entertaining using Giphy's public API
 * Leverages GraphQL to limit the number of queries made, and the effort needed to parse unnneccesary json
+
+
+
+### Installation Instructions
+
+
+
+### Link to Demo
