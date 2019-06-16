@@ -13,9 +13,9 @@ const client = new ApolloClient({
 });
 
 const bot = new BootBot({
-  accessToken: 'EAAdIlEun0UsBADH6AT6nyTYyUZBxzbGo6KlCXIPVF4q3UFFgBbHvoyKFAb0t6FC3Ml1bKt5kcbDZC1kVlZCrPyl8dpaDU1BQOHfZC7pp33CvJxyuLaKboQRnHINLfM2sZC4hwJZAB9AIbM6ZBTVBaB1S6g8QcIhCvXJQUVEwIpZAsAZDZD',
+  accessToken: 'EAAGdAS8ptZC4BAMZA4XYGx0pv1ZC6BKMD7FRIZA4MyVvOM2j36TTZAgBexMZBMMVt07okl878ZB3DW7mPKrBwdvIVaOkTZAVu0xZC6jaHfDP4WNglwRMB6VjsJt8kcJMzAL0QGjZAYQKsY9FWsL78j4bFXoxZCIYyurSHdyP96aYsIlSwZDZD',
   verifyToken: 'team11',
-  appSecret: '2c0ee0cd40a73013cf18e0cc4ebd066a'
+  appSecret: 'b4cf74f72f6b99486820d03964899e52'
 });
 
 bot.on('message', (payload, chat) => {
@@ -27,7 +27,7 @@ bot.on('message', (payload, chat) => {
 
 bot.hear(['hello', 'hi', /hey( there)?/i], (payload, chat) => {
 
-	console.log(payload);
+	// console.log(payload);
 
 	chat.conversation((convo) => {
 
@@ -35,21 +35,47 @@ bot.hear(['hello', 'hi', /hey( there)?/i], (payload, chat) => {
 		    
 		    chat.say(`Hello, ${user.first_name}!`).then(()  => {
 
-		    				//call graphql
+	    	    const GET_USER_DETAILS = gql`
+					query getUser($userId: String!) {
+						user(userId: $userId) {
+							activities{
+								activity
+								accessibility
+								type
+								participants
+								price
+								key
+							}
+						}
+					}
+			    `;
 
-			//if new user
 
-			newUserModule.haveConversion(convo,client);
+				client.query({
+				    query: GET_USER_DETAILS,
+				    variables: {
+				      userId: user.id,
+				    }
+				  })
+				  .then((returnedData) => {
+
+				  	console.log(returnedData);
+
+				  	convo.set('userId', user.id);
+
+			  		if (returnedData.data.user.activities === undefined || returnedData.data.user.activities.length == 0) {
+					    //if new user
+						newUserModule.haveConversion(convo, client);
+
+					} else {
+
+						console.log("this is an old user!!");
+						oldUserModule.haveConversion(convo, client);
+
+					}
 
 
-
-			//else if old user
-
-			// oldUserModule.haveConversion(convo);
-
-
-
-
+				  });
 		    });
 
 		  });

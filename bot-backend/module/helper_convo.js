@@ -7,10 +7,6 @@ const GIPHY_URL = `https://api.giphy.com/v1/gifs/search?api_key=Ky0tspF0p3JZsGCS
 var self = {
     
     preText: function(convo, client) {
-
-
-
-
         convo.ask({
                     text: `Bored?`,
                     quickReplies: ['Yes 😐', 'Hell no!']
@@ -49,30 +45,31 @@ var self = {
 
         //call graphql and provide an activity
 
-    const GET_BORED_BY_ID = gql`
-        query getBoredById($atype: String!   ) {
+    const GET_ACTIVITY_BY_TYPE = gql`
+        query getActivityByType($atype: String!) {
          activity(type: $atype) {
            activity
+           accessibility
            type
+           participants
            price
-
+           key
          }
         }
     `;
 
     client
       .query({
-        query: GET_BORED_BY_ID,
+        query: GET_ACTIVITY_BY_TYPE,
         variables: {
           atype: convo.get('actType'),
         }
       })
       .then((returnedData) => {
 
-        console.log(returnedData);
-      
+        convo.set('activityKey', returnedData.data.activity.key)
 
-              convo.ask({
+        convo.ask({
             text: returnedData.data.activity.activity,
             quickReplies: ['I like it!','You\'ve got to be kidding?! 😒']
         }, (payload, convo) => {
@@ -80,22 +77,49 @@ var self = {
             const text = payload.message.text;
             if(text=='I like it!'){
 
-                // convo.say(`Great. See you!`);
 
 
-              fetch(GIPHY_URL + 'thumbs')
-                .then(res => res.json())
-                .then(json => {
-                  convo.say({
-                    attachment: 'image',
-                    url: json.data[0].images.original.url
-                  }, {
-                    typing: true
+               //save this activity against user
+
+               const SAVE_USER_ACTIVITY = gql`
+                    mutation saveUser($userId: String!, $activityKey: String!) {
+                        saveActivityForUser(userId: $userId, activityKey :$activityKey)
+                        {
+                            userId
+                            activities {
+                                activity
+                                accessibility
+                                type
+                                participants
+                                price
+                                key
+                            }
+                        }
+                    }
+                `;
+
+
+                client.mutate({
+                    mutation: SAVE_USER_ACTIVITY,
+                    variables: {
+                      userId: convo.get('userId'),
+                      activityKey: convo.get('activityKey')
+                    }
+                  })
+                  .then((returnedData) => {
+
+                        fetch(GIPHY_URL + 'thumbs')
+                        .then(res => res.json())
+                        .then(json => {
+                          convo.say({
+                            attachment: 'image',
+                            url: json.data[0].images.original.url
+                          }, {
+                            typing: true
+                          });
+                        });
+                        convo.end();
                   });
-                });
-
-
-                convo.end();
 
 
             } else{

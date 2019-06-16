@@ -29,7 +29,7 @@ class ActivityAPI extends RESTDataSource {
   async getActivityByType({ type }) {
 
       const response = await this.get('activity', { type: type });
-      return this.boredReducer(response);
+      return this.activityReducer(response);
   }
 
   async getActivityByPrice({ price }) {
