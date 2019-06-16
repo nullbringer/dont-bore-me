@@ -3,10 +3,14 @@ module.exports = {
     activity: (_, { type }, { dataSources }) =>
       dataSources.activityAPI.getActivityByType({ type: type }),
 
+    activityByPrice: (_, { price }, { dataSources }) =>
+      dataSources.activityAPI.getActivityByPrice({ price: price }),
+
 
     user: async (_, { userId }, { dataSources }) => {
       const userdata = await dataSources.userAPI.getUser({ userId });
       
+      userdata.reverse();
       const dataToReturn = userdata.map(({ activityKey }) =>
         dataSources.activityAPI.getActivityByKey(activityKey),
       );

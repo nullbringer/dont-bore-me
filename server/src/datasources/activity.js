@@ -32,6 +32,15 @@ class ActivityAPI extends RESTDataSource {
       return this.boredReducer(response);
   }
 
+  async getActivityByPrice({ price }) {
+
+      //console.log(price);
+      const response = await this.get('activity', {minprice: 0 ,maxprice: price });
+
+      //console.log(response);
+      return this.activityReducer(response);
+  }
+
 }
 
 module.exports = ActivityAPI;

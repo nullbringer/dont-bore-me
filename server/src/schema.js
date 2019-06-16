@@ -6,6 +6,7 @@ type Query {
   activities: [Activity]!
   activity(type: String!): Activity
   user(userId: String!):User
+  activityByPrice(price: Float!):Activity
   
 
   
