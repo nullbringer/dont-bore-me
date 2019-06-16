@@ -77,39 +77,89 @@ var self = {
 
         //call graphql and provide an activity
 
-    const GET_ACTIVITY_BY_TYPE = gql`
-        query getActivityByType($atype: String!) {
-         activity(type: $atype) {
-           activity
-           accessibility
-           type
-           participants
-           price
-           key
-         }
-        }
-    `;
+        const GET_ACTIVITY_BY_TYPE = gql`
+            query getActivityByType($atype: String!) {
+             activity(type: $atype) {
+               activity
+               accessibility
+               type
+               participants
+               price
+               key
+             }
+            }
+        `;
 
-    client
-      .query({
-        query: GET_ACTIVITY_BY_TYPE,
-        variables: {
-          atype: convo.get('actType'),
-        }
-      })
-      .then((returnedData) => {
+        client
+          .query({
+            query: GET_ACTIVITY_BY_TYPE,
+            variables: {
+              atype: convo.get('actType'),
+            }
+          })
+          .then((returnedData) => {
+                self.makeDecision(convo,client, returnedData);
+        });
+    },
 
-        convo.set('activityKey', returnedData.data.activity.key)
+    suggestNewActivityPriceLimit: function(convo, client, maxPrice) {
+
+        //call graphql and provide an activity
+
+        if(maxPrice>=0.6)maxPrice = 0.5
+        else maxPrice = 0.3
+
+        const GET_ACTIVITY_BY_PRICE = gql`
+          query getActivityByPrice($price: Float!) {
+            activityByPrice(price: $price) {
+              activity
+              accessibility
+              type
+              participants
+              price
+              key
+            }
+          }
+        `;
+
+        client
+          .query({
+            query: GET_ACTIVITY_BY_PRICE,
+            variables: {
+              price: maxPrice,
+            }
+          })
+          .then((returnedData) => {
+                self.makeDecision(convo,client, returnedData);
+        });
+    },
+
+    makeDecision: function(convo, client, returnedData) {
+
+        convo.set('activityKey', returnedData.data.activity.key);
+
+        const actPrice = returnedData.data.activity.price; 
+        const priceIndicator ="";
+        if(actPrice>0.3 && actPrice<0.6)priceIndicator = "$$"
+        else if(actPrice>=0.6)priceIndicator = "$$$"
+
+
+        const textToAsk = returnedData.data.activity.activity + `
+          Price - ` + priceIndicator;
+
+        const qrOptions =  ['Sounds good','Never!!!! 😒'];
+
+        if(priceIndicator)qrOptions.push('Too Pricey!')
+
+
 
         convo.ask({
             text: returnedData.data.activity.activity,
-            quickReplies: ['I like it!','You\'ve got to be kidding?! 😒']
+            quickReplies: qrOptions
         }, (payload, convo) => {
             
             const text = payload.message.text;
-            if(text=='I like it!'){
-
-
+            if(text=='Sounds good'){
 
                //save this activity against user
 
@@ -154,7 +204,11 @@ var self = {
                   });
 
 
-            } else{
+            } else if(text=='Too Pricey!'){
+
+                self.suggestNewActivityPriceLimit(convo, client, actPrice);
+
+            }else{
 
                 convo.say(`Okay!`).then(() => self.askForActivityType(convo, client));
 
@@ -162,14 +216,6 @@ var self = {
             
             
         });
-
-
-    });
-
-
-
-
-
 
     }
     
