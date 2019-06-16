@@ -67,6 +67,8 @@ var self = {
       })
       .then((returnedData) => {
 
+        convo.set('activityKey', returnedData.data.activity.key)
+
         convo.ask({
             text: returnedData.data.activity.activity,
             quickReplies: ['I like it!','You\'ve got to be kidding?! 😒']
@@ -75,22 +77,49 @@ var self = {
             const text = payload.message.text;
             if(text=='I like it!'){
 
-                // convo.say(`Great. See you!`);
 
 
-              fetch(GIPHY_URL + 'thumbs')
-                .then(res => res.json())
-                .then(json => {
-                  convo.say({
-                    attachment: 'image',
-                    url: json.data[0].images.original.url
-                  }, {
-                    typing: true
+               //save this activity against user
+
+               const SAVE_USER_ACTIVITY = gql`
+                    mutation saveUser($userId: String!, $activityKey: String!) {
+                        saveActivityForUser(userId: $userId, activityKey :$activityKey)
+                        {
+                            userId
+                            activities {
+                                activity
+                                accessibility
+                                type
+                                participants
+                                price
+                                key
+                            }
+                        }
+                    }
+                `;
+
+
+                client.mutate({
+                    mutation: SAVE_USER_ACTIVITY,
+                    variables: {
+                      userId: convo.get('userId'),
+                      activityKey: convo.get('activityKey')
+                    }
+                  })
+                  .then((returnedData) => {
+
+                        fetch(GIPHY_URL + 'thumbs')
+                        .then(res => res.json())
+                        .then(json => {
+                          convo.say({
+                            attachment: 'image',
+                            url: json.data[0].images.original.url
+                          }, {
+                            typing: true
+                          });
+                        });
+                        convo.end();
                   });
-                });
-
-
-                convo.end();
 
 
             } else{
