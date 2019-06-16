@@ -13,9 +13,9 @@ const client = new ApolloClient({
 });
 
 const bot = new BootBot({
-  accessToken: 'EAAGdAS8ptZC4BAMZA4XYGx0pv1ZC6BKMD7FRIZA4MyVvOM2j36TTZAgBexMZBMMVt07okl878ZB3DW7mPKrBwdvIVaOkTZAVu0xZC6jaHfDP4WNglwRMB6VjsJt8kcJMzAL0QGjZAYQKsY9FWsL78j4bFXoxZCIYyurSHdyP96aYsIlSwZDZD',
+  accessToken: 'EAAERy6fChI8BADRZABscfQ3hA0Jf5VHYSaU2x31D1ZAX8NEInKGzDuEhXtwC5M9uOFnAJ5RcMoWKU3chC4E0ZCsRJVhHuc1zqEwlvFf6ispfX6SzUv5xHaVv3tafXRaWVFk5qDH1DRGrR56ZBflzPBGBNsqZCGnHWorprTnVe5QZDZD',
   verifyToken: 'team11',
-  appSecret: 'b4cf74f72f6b99486820d03964899e52'
+  appSecret: 'c973318f19e3ed341f94a6d6097aa17f'
 });
 
 bot.on('message', (payload, chat) => {
@@ -24,6 +24,7 @@ bot.on('message', (payload, chat) => {
 
 
 });
+
 
 bot.hear(['hello', 'hi', /hey( there)?/i], (payload, chat) => {
 
@@ -59,7 +60,7 @@ bot.hear(['hello', 'hi', /hey( there)?/i], (payload, chat) => {
 				  })
 				  .then((returnedData) => {
 
-				  	console.log(returnedData);
+				  	console.log(returnedData.data.user.activities);
 
 				  	convo.set('userId', user.id);
 
@@ -70,7 +71,7 @@ bot.hear(['hello', 'hi', /hey( there)?/i], (payload, chat) => {
 					} else {
 
 						console.log("this is an old user!!");
-						oldUserModule.haveConversion(convo, client);
+						oldUserModule.haveConversion(convo, client, returnedData.data.user.activities[0]);
 
 					}
 

@@ -36,6 +36,27 @@ var self = {
     },
 
 
+    feelbackLastIdea: function(convo, client, lastActivity) {
+        convo.ask({
+                    text: `Did you enjoy my last suggestion,"`+lastActivity.activity+`" ?`,
+                    quickReplies: ['Yup', 'Not at all!']
+                }, (payload, convo) => {
+                const text = payload.message.text;
+
+                if(text == 'Yup'){
+                  convo.set('actType', lastActivity.type);
+
+                  convo.say(`Great! here's something similar! `).then(() => self.suggestNewActivity(convo, client));
+
+                } else{
+                  convo.say(`Ooops! `).then(() => self.askForActivityType(convo, client));
+                    
+                }
+                
+            });
+    },
+
+
     askForActivityType: function(convo, client) {
 
             convo.ask({
