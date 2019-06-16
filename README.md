@@ -2,10 +2,10 @@
 ### This is the home page of 'DONT-BORE-ME'
 This is a chat bot app that integrates with Facebook Messenger and provides prompts for things to do when you're bored, based on data from the BoredAPI.
 
-## Tech Stack
-* Javascript
+### Tech
+* Node.js
 * GraphQL
-* ApolloQL Client
+* Apollo Client
 * Apollo Server
 * SQLite DB
 
