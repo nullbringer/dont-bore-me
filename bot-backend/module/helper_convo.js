@@ -1,8 +1,15 @@
 const constants = require('./../data/constant.js');
 import { gql } from 'apollo-boost';
 
-const fetch = require('node-fetch');
-const GIPHY_URL = `https://api.giphy.com/v1/gifs/search?api_key=Ky0tspF0p3JZsGCSt5D25iD11Q4rX0oB&limit=25&offset=0&rating=G&lang=en&q=`;
+const GET_GIPHY_BY_KEYWORD = gql`
+  query getGifById($kw: String!) {
+    gifById(search: $kw) {
+      image_url
+    }
+  }
+  `;
+
+
 
 var self = {
     
@@ -15,15 +22,21 @@ var self = {
 
                 if(text.includes('no')){
                     convo.say(`My job here is done! `);
-                    fetch(GIPHY_URL + 'May the force be with you!')
-                    .then(res => res.json())
-                    .then(json => {
-                      convo.say({
-                        attachment: 'image',
-                        url: json.data[0].images.original.url
-                      }, {
-                        typing: true
-                      });
+
+                    client
+                      .query({
+                        query: GET_GIPHY_BY_KEYWORD,
+                        variables: {
+                          kw: 'May the force be with you!',
+                        }
+                      })
+                      .then((returnedData) => {
+                          convo.say({
+                            attachment: 'image',
+                            url: returnedData.data.gifById.image_url
+                          }, {
+                            typing: true
+                          });
                     });
 
                     convo.end();
@@ -190,15 +203,20 @@ var self = {
                   })
                   .then((returnedData) => {
 
-                        fetch(GIPHY_URL + 'thumbs')
-                        .then(res => res.json())
-                        .then(json => {
-                          convo.say({
-                            attachment: 'image',
-                            url: json.data[0].images.original.url
-                          }, {
-                            typing: true
-                          });
+                      client
+                      .query({
+                            query: GET_GIPHY_BY_KEYWORD,
+                            variables: {
+                              kw: 'thumb',
+                            }
+                          })
+                          .then((returnedData) => {
+                              convo.say({
+                                attachment: 'image',
+                                url: returnedData.data.gifById.image_url
+                              }, {
+                                typing: true
+                              });
                         });
                         convo.end();
                   });
