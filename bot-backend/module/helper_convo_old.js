@@ -15,7 +15,7 @@ var self = {
 
                 if(text.includes('no')){
                     convo.say(`My job here is done! `);
-                    fetch(GIPHY_URL + 'May the force be with you!')
+                    fetch(GIPHY_URL + 'Get out of here!')
                     .then(res => res.json())
                     .then(json => {
                       convo.say({
@@ -36,20 +36,61 @@ var self = {
     },
 
 
+
     askForActivityType: function(convo, client) {
 
+        
             convo.ask({
-                text: `What would you like to do?`,
-                quickReplies: constants.ACTIVITY_TYPES
-            }, (payload, convo) => {
-                const text = payload.message.text;
-                convo.set('actType', text);
+            //     text: `What would you like to do?`,
+            //     quickReplies: constants.ACTIVITY_TYPES
+            // }, (payload, convo) => {
+            //     const text = payload.message.text;
+            //     convo.set('actType', text);
 
-                self.suggestNewActivity(convo, client);
+            //     self.suggestNewActivity(convo, client);
 
-                
+              
+            text: `Did you enjoy my last suggestion, " "?`,
+            quickReplies: ['Yup', 'Not at all!']
+        }, (payload, convo) => {
+        const text = payload.message.text
+        // const userId = convo.get('userId')
+        if(text=="Yup"){
+            const GET_LAST_ACTIVIT_BY_USER_ID = gql`
+            query getUser {
+                user(userId: $userId) {
+                userId
+                activities{
+                activity
+                accessibility
+                type
+                price
+                }
+                }
+                }
+                `;
+            client
+            .query({
+                query: GET_LAST_ACTIVIT_BY_USER_ID,
+                variables: {
+                userId: convo.get('userId'),
+                }
+            })
+            .then((returnedData) => {
+                // TO DO - Get returned data activity type query HERE!
+                convo.set('activityKey', returnedData.data.activity[0].type)
+       
             });
-        },
+
+        } else{
+            self.askForActivityType(convo, client);
+        }
+
+        });
+    },
+
+
+
 
 
     suggestNewActivity: function(convo, client) {
@@ -103,7 +144,7 @@ var self = {
                                 type
                                 participants
                                 price
-                                key
+                                thumbs         key
                             }
                         }
                     }
