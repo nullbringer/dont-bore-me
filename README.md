@@ -30,8 +30,8 @@ Picture this. You're bored. Mind-numbingly bored. So bored, you can't even begin
 
 ### Installation Instructions
 * Create a Facebook developer app and generate tokens. take a look at Facebook's [Quick Start Guide](https://developers.facebook.com/docs/messenger-platform/guides/quick-start) 
-* Use _deploy/apollo-server_ branch as a Heroku App
-* Use _deploy/bot_ branch as another Heroku App
+* Use _deploy/server_ branch as a Heroku App
+* Use _deploy/bot-backend_ branch as another Heroku App
   * Change the target of Apollo client to your apollo-server url in index.js before deploying
   * Use the tokens of your facebook developer app
 
@@ -39,3 +39,5 @@ Picture this. You're bored. Mind-numbingly bored. So bored, you can't even begin
 
 
 ### Link to Demo
+
+[https://youtu.be/WsWP3us_-j8](https://youtu.be/WsWP3us_-j8)
