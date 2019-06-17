@@ -20,7 +20,7 @@ gifReducer(response) {
 
 async getGifById({ search }) {
   //console.log(search)
-  const response = await this.get('search', { api_key: "Ky0tspF0p3JZsGCSt5D25iD11Q4rX0oB",limit : 5,rating:"G",lang:"en",
+  const response = await this.get('search', { api_key: "xxx",limit : 5,rating:"G",lang:"en",
   q:search });
   //console.log(response.data[0].images.original.url)
   var min=0; 

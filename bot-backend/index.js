@@ -13,9 +13,9 @@ const client = new ApolloClient({
 });
 
 const bot = new BootBot({
-  accessToken: 'EAAERy6fChI8BADRZABscfQ3hA0Jf5VHYSaU2x31D1ZAX8NEInKGzDuEhXtwC5M9uOFnAJ5RcMoWKU3chC4E0ZCsRJVhHuc1zqEwlvFf6ispfX6SzUv5xHaVv3tafXRaWVFk5qDH1DRGrR56ZBflzPBGBNsqZCGnHWorprTnVe5QZDZD',
-  verifyToken: 'team11',
-  appSecret: 'c973318f19e3ed341f94a6d6097aa17f'
+  accessToken: 'xxx',
+  verifyToken: 'xxx',
+  appSecret: 'xxx'
 });
 
 bot.on('message', (payload, chat) => {
